@@ -2,13 +2,10 @@
     class DB {
         protected $conn;
         function _constrct(){
-            $doc = new DOMDocument();
-            $doc->load('/config/config.xml');
-            $db = $doc->getElementsByTagName("db");
-            $username = $db->getElementsByTagName("user_name");
-            $password = $db->getElementsByTagName("pass_word");
-            $servername = $db->getElementsByTagName("server_name");
-            $servicename = $db->getElementsByTagName("service_name");
+            $username = 's3766925';
+            $password = '9394azpokr';
+            $servername = 'talsprddb01.int.its.rmit.edu.au';
+            $servicename = 'CSAMPR1.ITS.RMIT.EDU.AU';
             $connection = $servername."/".$servicename;
 
             $conn = oci_connect($username, $password, $connection);
