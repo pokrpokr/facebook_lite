@@ -4,21 +4,15 @@
  </head>
  <body>
  <?php echo '<p>Establishing a connection to an Oracle database.</p>';
+
+
 // establish a database connection to your Oracle database.
-        $doc = new DOMDocument();
-        echo "##########";
-        $doc->load('../config/config.xml');
-        print $doc->saveXMl();
-        $db = $doc->getElementsByTagName("db"); 
-        echo "1111111";
-        $username = $db->getElementsByTagName("user_name");
-        $password = $db->getElementsByTagName("pass_word");
-        $servername = $db->getElementsByTagName("server_name");
-        $servicename = $db->getElementsByTagName("service_name");
-        echo "2222222";
-        
-    
-        $connection = $servername."/".$servicename;
+$username = 's3766925';
+$password = '9394azpokr';
+$servername = 'talsprddb01.int.its.rmit.edu.au';
+$servicename = 'CSAMPR1.ITS.RMIT.EDU.AU';
+$connection = $servername."/".$servicename;
+
 $conn = oci_connect($username, $password, $connection);
 
 if(!$conn)
