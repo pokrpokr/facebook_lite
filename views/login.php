@@ -120,7 +120,7 @@
 </body>
 </html>
 <?php
-require '../models/db.php';
+require_once '../models/db.php';
 $db = new DB();
 $visibility_level_arr = array("public", "friend_only", "self_only");
 $status_arr = array("offline", "online", "cloaking");
@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $result = $db->select('members', "id, password, full_name", "email = '$email'");
         if(isset($result["rows"])){
             $verify_pass = $result["results"][0]["PASSWORD"];
-            if (password_verify($password, $verify_pass)){
+            if (hash_equals($verify_pass, crypt($password, 'password'))){
               $_SESSION['mem_id'] = $result["results"][0]["ID"];
               $_SESSION['full_name'] = $result["results"][0]["FULL_NAME"];
               $db->db_close();
@@ -169,8 +169,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $birth_year = test_input($_POST["selectyear"]);
       $birth = $birth_year."-".$birth_mon."-".$birth_day;
 
-      $password = password_hash($password, PASSWORD_DEFAULT);
-      if (password_verify($con_password, $password)){
+      $password = crypt($password, 'password');
+      if (hash_equals($password, crypt($con_password, 'password'))){
         $data = "'$password', '$email', '$name', to_date('$birth', 'yyyy-mm-dd'), '$gender', '$status_arr[1]', '$location', '$visibility_level_arr[0]'";
         $results = $db->insert('members', $data);
         if($results["status"]){
@@ -180,7 +180,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           header("location:index.php");
         }
       }else{
-
+        echo "Running Here";
+        echo $password."\n".crypt($con_password);
       }
 
       break;

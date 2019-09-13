@@ -1,5 +1,5 @@
 <?php 
-require '../models/db.php';
+require_once '../models/db.php';
 session_start();
 if (empty($_SESSION['mem_id'])) {
 	header("location:login.php");
@@ -10,8 +10,9 @@ session_destroy();
 session_start();
 $_SESSION['mem_id'] = $temp_id;
 $_SESSION['full_name'] = $temp_name;
-var_dump($_SESSION['full_name']);
-ob_start();
+$db = new DB();
+$mem_id = $_SESSION['mem_id'];
+$name = $_SESSION['full_name'];
 ?>
 <html>
 <head>
@@ -26,11 +27,18 @@ ob_start();
 <body>
 	 <p>Welcome Facebooklite</p>
 	 <div id="info">
-	 	<label id="mem_name"><?php $name ?></label>
+	 	<p id="name"><?php echo $name; ?></p>
 	 	<button id="logout" onclick="window.location.href='logout.php'">logout</button>
 	 </div>
 	 <div id="posts">
 	 	<?php include 'posts.php' ?>
+	 	<button id="show_post_form">Post</button>
+	 	<div id="create_post">
+	 		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="form-horizontal"> 
+	 			<textarea name="post_content" class="form-control" rows="3"></textarea>
+	 			<input type="submit" value="create_post" name="action">
+	 		</form>
+	 	</div>
 	 </div>
 	 <div id="friends">
 	 	<?php include 'friends.php' ?>
@@ -38,12 +46,31 @@ ob_start();
 </body>
 </html>
 <?php 
-	$db = new DB();
-	$id = $_SESSION['mem_id'];
-	$name = $_SESSION['full_name'];
-	// $posts = $db->select('posts', "id, content, members_id", "members_id = '$id'");
-
-	function create_post($db){
-
+	switch ($_POST['action']) {
+		case 'create_post':
+			if (isset($_POST['post_content'])) {
+				$content = $_POST['post_content']; 
+				$result = $db->insert('posts', "'$content', $mem_id");
+				if ($result['status']) {
+					$db->db_close();
+					header("location:index.php");
+				}
+			} else {
+				echo "Please enter post content";
+			}
+			break;
+		case 'delete_post':
+			if (isset($_POST['post_id'])) {
+				$del_post_id = $_POST['post_id'];
+				$result = $db->delete('posts', "id = $del_post_id");
+				if ($result) {
+					$db->db_close();
+					header("location:index.php");
+				}
+			}else{
+				echo "Can't delete";
+			}
+			break;
 	}
-?>
+ ?>
+

@@ -35,12 +35,12 @@ ALTER TABLE friends
 
 CREATE TABLE likes (
     id             INTEGER NOT NULL,
-    create_at      TIMESTAMP(8),
-    update_at      TIMESTAMP(8),
     like_time      DATE,
     posts_id       INTEGER NOT NULL,
     responses_id   INTEGER NOT NULL,
     member_id      INTEGER,
+    create_at      TIMESTAMP(8),
+    update_at      TIMESTAMP(8),
     delete_at      TIMESTAMP(8)
 )
 LOGGING;
@@ -78,9 +78,9 @@ ALTER TABLE members ADD CONSTRAINT members_email_un UNIQUE ( email );
 CREATE TABLE posts (
     id           INTEGER NOT NULL,
     content      CLOB,
+    members_id   INTEGER NOT NULL,
     create_at    TIMESTAMP(8),
     update_at    TIMESTAMP(8),
-    members_id   INTEGER NOT NULL,
     delete_at    TIMESTAMP(8)
 )
 LOGGING;
@@ -90,10 +90,10 @@ ALTER TABLE posts ADD CONSTRAINT posts_pk PRIMARY KEY ( id );
 CREATE TABLE responses (
     id                   INTEGER NOT NULL,
     posts_id             INTEGER NOT NULL,
-    create_at            TIMESTAMP(8),
-    update_at            TIMESTAMP(8),
     members_id           INTEGER NOT NULL,
     parent_response_id   INTEGER,
+    create_at            TIMESTAMP(8),
+    update_at            TIMESTAMP(8),
     delete_at            TIMESTAMP(8)
 )
 LOGGING;
